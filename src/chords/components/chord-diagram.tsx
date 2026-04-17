@@ -20,7 +20,7 @@ export function ChordDiagram({
 }: ChordDiagramProps) {
   const { frets, fingers, baseFret, barres = [] } = position;
 
-  const maxFrets = 5;
+  const maxFrets = 6;
   const stringCount = 6;
 
   // Calculate SVG viewBox dimensions
