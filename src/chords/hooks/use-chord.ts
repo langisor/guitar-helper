@@ -1,115 +1,56 @@
-import { useEffect, useMemo, useState } from "react";
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import { ChordsService } from "../services/chords.service";
-import { Chord, ChordKey, ChordSuffix } from "../types/chords.types";
+import { ChordKey, ChordSuffix } from "../types/chords.types";
 
 const service = ChordsService.getInstance();
 
+const QUERY_KEYS = {
+  keys: ["chords", "keys"],
+  suffixes: ["chords", "suffixes"],
+  chord: (key: ChordKey, suffix: ChordSuffix) => ["chords", key, suffix],
+  byKey: (key: ChordKey) => ["chords", "key", key],
+};
+
 /**
- * Get available chord keys from service
+ * Available keys
  */
-export function useAvailableKeys(): ChordKey[] {
-  const [keys, setKeys] = useState<ChordKey[]>([]);
-
-  useEffect(() => {
-    service.getAvailableKeys().then(setKeys);
-  }, []);
-
-  return keys;
+export function useChordKeys() {
+  return useQuery({
+    queryKey: QUERY_KEYS.keys,
+    queryFn: () => service.getAvailableKeys(),
+  });
 }
 
 /**
- * Get available suffixes from service
+ * Available suffixes
  */
-export function useAvailableSuffixes(): ChordSuffix[] {
-  const [suffixes, setSuffixes] = useState<ChordSuffix[]>([]);
-
-  useEffect(() => {
-    service.getAvailableSuffixes().then(setSuffixes);
-  }, []);
-
-  return suffixes;
+export function useChordSuffixes() {
+  return useQuery({
+    queryKey: QUERY_KEYS.suffixes,
+    queryFn: () => service.getAvailableSuffixes(),
+  });
 }
 
 /**
- * Get all chords for a key
+ * Single chord
  */
-export function useChords(key: ChordKey | null): Chord[] {
-  const [chords, setChords] = useState<Chord[]>([]);
-
-  useEffect(() => {
-    if (!key) {
-      setChords([]);
-      return;
-    }
-
-    service.getChordsForKey(key).then(setChords);
-  }, [key]);
-
-  return chords;
+export function useChordRQ(key: ChordKey | null, suffix: ChordSuffix | null) {
+  return useQuery({
+    queryKey: key && suffix ? QUERY_KEYS.chord(key, suffix) : [],
+    queryFn: () => service.getChordDetail(key!, suffix!),
+    enabled: !!key && !!suffix,
+  });
 }
 
 /**
- * Get single chord (key + suffix)
+ * All chords for key
  */
-export function useChord(
-  key: ChordKey | null,
-  suffix: ChordSuffix | null
-): Chord | null {
-  const [chord, setChord] = useState<Chord | null>(null);
-
-  useEffect(() => {
-    if (!key || !suffix) {
-      setChord(null);
-      return;
-    }
-
-    service.getChordDetail(key, suffix).then(setChord);
-  }, [key, suffix]);
-
-  return chord;
-}
-
-/**
- * Optional: pre-render optimized chord shape (for fretboard UI)
- */
-export function useChordShape(
-  key: ChordKey | null,
-  suffix: ChordSuffix | null
-) {
-  const [shape, setShape] = useState<any>(null);
-
-  useEffect(() => {
-    if (!key || !suffix) {
-      setShape(null);
-      return;
-    }
-
-    service.getRenderableChord(key, suffix).then(setShape);
-  }, [key, suffix]);
-
-  return shape;
-}
-
-/**
- * Search hook (autocomplete UI)
- */
-export function useChordSearch(query: string) {
-  const [results, setResults] = useState<
-    Array<{ key: string; suffix: string }>
-  >([]);
-
-  useEffect(() => {
-    if (!query) {
-      setResults([]);
-      return;
-    }
-
-    const timeout = setTimeout(() => {
-      service.searchChords(query).then(setResults);
-    }, 150); // basic debounce
-
-    return () => clearTimeout(timeout);
-  }, [query]);
-
-  return results;
+export function useChordsByKeyRQ(key: ChordKey | null) {
+  return useQuery({
+    queryKey: key ? QUERY_KEYS.byKey(key) : [],
+    queryFn: () => service.getChordsForKey(key!),
+    enabled: !!key,
+  });
 }

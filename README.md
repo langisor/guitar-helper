@@ -21,7 +21,17 @@ types/
 
 ## General Architecture
 
-> UI → hooks → ChordsService → Repository → JSON
+```text
+UI
+ ↓
+React Query
+ ↓
+ChordsService
+ ↓
+Repository
+ ↓
+JSON
+```
 
 This project follows a clean architecture pattern with clear separation of concerns:
 
