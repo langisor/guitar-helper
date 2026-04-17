@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chord Viewer
 
-## Getting Started
+I'll build this as a well-structured set of files — a reusable `ChordDiagram` component, TypeScript types, and the full Chord Explorer page.Here's what was generated — 5 files with a clean separation of concerns:
 
-First, run the development server:
+**File structure:**
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+app/chord-explorer/
+  page.tsx          ← Server Component, fetches data (ISR)
+  ChordExplorer.tsx ← Client Component, full page UI
+
+components/
+  ChordDiagram.tsx  ← Reusable SVG fretboard component
+
+hooks/
+  useChord.ts       ← useChord(), useAvailableKeys(), useAvailableSuffixes()
+
+types/
+  guitar.ts         ← Full TypeScript interfaces for your JSON shape
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## General Architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> UI → hooks → ChordsService → Repository → JSON
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project follows a clean architecture pattern with clear separation of concerns:
 
-## Learn More
+- **Server Components** (`page.tsx`) handle data fetching and initial rendering
+- **Client Components** (`ChordExplorer.tsx`) manage interactivity and state
+- **Reusable Components** (`ChordDiagram.tsx`) provide isolated functionality
+- **Hooks** (`useChord.ts`) encapsulate business logic
+- **Type Safety** (`guitar.ts`) ensures data consistency
 
-To learn more about Next.js, take a look at the following resources:
+**Key design decisions:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `page.tsx` is a **Server Component** that fetches data — swap the fetch URL for your actual API or import the JSON directly at build time (the comment in the file shows both options)
+- `ChordExplorer.tsx` is the **Client Component** with all interactivity (key/suffix selection, position picking)
+- `ChordDiagram` renders a pure SVG fretboard — it's fully standalone and reusable anywhere in your app
+- The `useChord` hook handles the `C#` → `Csharp` key normalization your JSON uses
+- All Shadcn components used: `Badge`, `Button`, `Select`, `Separator` — make sure those are installed via `npx shadcn@latest add badge button select separator`
