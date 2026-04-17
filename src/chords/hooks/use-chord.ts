@@ -1,10 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ChordsService } from "../services/chords.service";
+import {
+  getAvailableKeys,
+  getAvailableSuffixes,
+  getChordDetail,
+  getChordsForKey,
+} from "../actions/chords.actions";
 import { ChordKey, ChordSuffix } from "../types/chords.types";
-
-const service = ChordsService.getInstance();
 
 const QUERY_KEYS = {
   keys: ["chords", "keys"],
@@ -19,7 +22,7 @@ const QUERY_KEYS = {
 export function useChordKeys() {
   return useQuery({
     queryKey: QUERY_KEYS.keys,
-    queryFn: () => service.getAvailableKeys(),
+    queryFn: () => getAvailableKeys(),
   });
 }
 
@@ -29,7 +32,7 @@ export function useChordKeys() {
 export function useChordSuffixes() {
   return useQuery({
     queryKey: QUERY_KEYS.suffixes,
-    queryFn: () => service.getAvailableSuffixes(),
+    queryFn: () => getAvailableSuffixes(),
   });
 }
 
@@ -39,7 +42,7 @@ export function useChordSuffixes() {
 export function useChordRQ(key: ChordKey | null, suffix: ChordSuffix | null) {
   return useQuery({
     queryKey: key && suffix ? QUERY_KEYS.chord(key, suffix) : [],
-    queryFn: () => service.getChordDetail(key!, suffix!),
+    queryFn: () => getChordDetail(key!, suffix!),
     enabled: !!key && !!suffix,
   });
 }
@@ -50,7 +53,7 @@ export function useChordRQ(key: ChordKey | null, suffix: ChordSuffix | null) {
 export function useChordsByKeyRQ(key: ChordKey | null) {
   return useQuery({
     queryKey: key ? QUERY_KEYS.byKey(key) : [],
-    queryFn: () => service.getChordsForKey(key!),
+    queryFn: () => getChordsForKey(key!),
     enabled: !!key,
   });
 }
