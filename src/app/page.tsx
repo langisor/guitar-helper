@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   Music,
@@ -7,6 +8,7 @@ import {
   Guitar,
   GraduationCap,
   ArrowRight,
+  Timer,
 } from "lucide-react";
 import {
   Card,
@@ -40,6 +42,13 @@ const tools = [
     href: "/fretboard",
     icon: Layers,
     color: "bg-green-500/10 text-green-600",
+  },
+  {
+    title: "Metronome Trainer",
+    description: "Precision timing practice with mute modes and auto tempo",
+    href: "/metro-trainer",
+    icon: Timer,
+    color: "bg-red-500/10 text-red-600",
   },
   {
     title: "Terms Glossary",
@@ -116,6 +125,15 @@ export default function Home() {
                 <p className="font-mono text-xs bg-muted p-2 rounded">
                   A - A# - B - C - C# - D - D# - E - F - F# - G - G#
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/1.1.png"
+                    alt="The Musical Alphabet and Chromatic Scale"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
                 <p>
                   <strong>The Rule of B/C and E/F:</strong> There is no <TermDefinition term="Sharp (#)" /> between 
                   B and C or E and F. They are naturally only one <TermDefinition term="Interval" /> (one <TermDefinition term="Fret" />) apart.
@@ -164,6 +182,15 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/1.3.png"
+                    alt="Power of the Low E and A Strings"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -200,6 +227,15 @@ export default function Home() {
                 <p className="text-xs pt-2">
                   This distinction defines whether a <TermDefinition term="Triad" /> is <TermDefinition term="Major Chord" /> or <TermDefinition term="Minor Chord" />.
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/2.1.png"
+                    alt="Major Third vs Minor Third"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -215,6 +251,15 @@ export default function Home() {
                 <p>
                   It is neither major nor minor; it is pure strength and works in any context.
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/2.2.png"
+                    alt="The Perfect Fifth"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -254,6 +299,15 @@ export default function Home() {
                   <strong>Example (C Major):</strong>{" "}
                   <span className="font-mono">C (W) D (W) E (H) F (W) G (W) A (W) B (H) C</span>
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/3.png"
+                    alt="Major Scale Formula"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -309,6 +363,15 @@ export default function Home() {
                     <p className="text-xs mt-1 text-muted-foreground">Example: C (1), Eb (b3), G (5)</p>
                   </div>
                 </div>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/4.1.png"
+                    alt="Triads - Major and Minor"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -353,6 +416,15 @@ export default function Home() {
                   <strong>Theory Tip:</strong> This is why the G, C, and D chords (I, IV, and V) sound so good together in the <TermDefinition term="Key" /> of G! Try it in the{" "}
                   <Link href="/progressions" className="text-primary hover:underline">Progression Builder</Link>.
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/4.2.png"
+                    alt="Diatonic Chords - The Chord Family"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -390,6 +462,15 @@ export default function Home() {
                 <p className="text-xs pt-2">
                   Check the <Link href="/fretboard" className="text-primary hover:underline">Fretboard Explorer</Link> to visualize these shapes.
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/5.png"
+                    alt="Barre Chords and CAGED System"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -439,6 +520,15 @@ export default function Home() {
                   <strong>Why it works:</strong> It removes the &quot;tricky&quot; notes of the full scale 
                   (the 2nd and 6th), making it almost impossible to play a &quot;wrong&quot; note during a solo.
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/6.1.png"
+                    alt="Minor Pentatonic Pattern 1"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -458,6 +548,15 @@ export default function Home() {
                   <strong>Application:</strong> You can play the A Minor Pentatonic over a song in C Major, 
                   and it will sound great!
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/6.2.png"
+                    alt="Relative Major and Minor"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -495,6 +594,15 @@ export default function Home() {
                   <p className="font-semibold">Sixteenth Notes</p>
                   <p className="font-mono">1 e &amp; a, 2 e &amp; a, 3 e &amp; a, 4 e &amp; a</p>
                 </div>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/7.1.png"
+                    alt="Rhythm Subdivisions"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -511,6 +619,15 @@ export default function Home() {
                   Always practice with a metronome set to a slow <TermDefinition term="Tempo" /> (60–80 BPM) 
                   to develop your &quot;pocket&quot;—the ability to play perfectly in time.
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/7.2.png"
+                    alt="Internal Clock and Metronome Practice"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -571,7 +688,7 @@ export default function Home() {
       <section className="px-4 md:px-8 py-12">
         <div className="mx-auto max-w-4xl">
           <h2 className="text-2xl font-bold text-center mb-8">Put Theory into Practice</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {tools.map((tool) => (
               <Link key={tool.href} href={tool.href}>
                 <Card className="h-full border shadow-sm hover:shadow-md transition-all cursor-pointer group hover:-translate-y-1">

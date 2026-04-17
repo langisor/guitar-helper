@@ -8,6 +8,7 @@ const navItems = [
   { href: "/chords-nav", label: "Chords" },
   { href: "/progressions", label: "Progressions" },
   { href: "/fretboard", label: "Fretboard", mobile: false },
+  { href: "/metro-trainer", label: "Trainer", mobile: false },
   { href: "/terms", label: "Terms", mobile: false },
 ];
 
