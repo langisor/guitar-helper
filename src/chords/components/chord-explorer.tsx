@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Music, Grid3x3, Fingerprint, Volume2, Play } from "lucide-react";
 import { useAudioPlayback } from "@/chords/hooks/use-audio";
+import { useLeftHanded } from "@/chords/providers/left-handed-provider";
 import { cn } from "@/lib/utils";
 
 export default function ChordExplorer() {
@@ -34,6 +35,7 @@ export default function ChordExplorer() {
 
   const { data: chord } = useChordRQ(selectedKey, selectedSuffix);
   const { playChord, preloadChord, isReady, setVolume, volume } = useAudioPlayback();
+  const { isLeftHanded } = useLeftHanded();
 
   const positions = chord?.positions ?? [];
   const active = positions[positionIndex];
@@ -194,6 +196,7 @@ export default function ChordExplorer() {
                       position={pos}
                       width={120}
                       height={140}
+                      leftHanded={isLeftHanded}
                       className={cn(
                         "transition-all",
                         positionIndex === i ? "text-primary" : "text-foreground"

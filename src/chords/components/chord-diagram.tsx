@@ -8,17 +8,28 @@ interface ChordDiagramProps {
   width?: number;
   height?: number;
   className?: string;
+  leftHanded?: boolean;
 }
 
-const STRING_NAMES = ["E", "A", "D", "G", "B", "e"];
+const STRING_NAMES_STANDARD = ["E", "A", "D", "G", "B", "e"];
+const STRING_NAMES_LEFT_HANDED = ["e", "B", "G", "D", "A", "E"];
 
 export function ChordDiagram({
   position,
   width = 140,
   height = 160,
   className,
+  leftHanded = false,
 }: ChordDiagramProps) {
   const { frets, fingers, baseFret, barres = [] } = position;
+
+  // Helper to get string index for left-handed display
+  // In left-handed mode, string 5 (high e) is visually at position 0 (leftmost)
+  // and string 0 (low E) is visually at position 5 (rightmost)
+  const getVisualStringIndex = (stringIndex: number) =>
+    leftHanded ? 5 - stringIndex : stringIndex;
+
+  const stringNames = leftHanded ? STRING_NAMES_LEFT_HANDED : STRING_NAMES_STANDARD;
 
   const maxFrets = 6;
   const stringCount = 6;
@@ -52,17 +63,20 @@ export function ChordDiagram({
       />
 
       {/* Vertical strings */}
-      {Array.from({ length: stringCount }).map((_, i) => {
-        const x = startX + i * stringSpacing;
+      {Array.from({ length: stringCount }).map((_, visualIdx) => {
+        const x = startX + visualIdx * stringSpacing;
+        // For string thickness: in standard mode, outer strings (0 and 5) are thicker
+        // In left-handed mode, we need to check the original string index
+        const originalIdx = leftHanded ? 5 - visualIdx : visualIdx;
         return (
           <line
-            key={`string-${i}`}
+            key={`string-${visualIdx}`}
             x1={x}
             y1={nutY}
             x2={x}
             y2={nutY + maxFrets * fretHeight}
             stroke="currentColor"
-            strokeWidth={i === 0 || i === 5 ? 1.5 : 1}
+            strokeWidth={originalIdx === 0 || originalIdx === 5 ? 1.5 : 1}
             opacity={0.6}
           />
         );
@@ -97,7 +111,7 @@ export function ChordDiagram({
       )}
 
       {/* String names at top */}
-      {STRING_NAMES.map((name, i) => {
+      {stringNames.map((name, i) => {
         const x = startX + i * stringSpacing;
         return (
           <text
@@ -116,13 +130,14 @@ export function ChordDiagram({
       })}
 
       {/* Open (O) and Mute (X) indicators */}
-      {frets.map((fret, i) => {
-        const x = startX + i * stringSpacing;
+      {frets.map((fret, stringIdx) => {
+        const visualIdx = getVisualStringIndex(stringIdx);
+        const x = startX + visualIdx * stringSpacing;
         if (fret === 0) {
           // Open string - circle
           return (
             <circle
-              key={`open-${i}`}
+              key={`open-${stringIdx}`}
               cx={x}
               cy={nutY - 12}
               r="3.5"
@@ -137,7 +152,7 @@ export function ChordDiagram({
           // Muted string - X
           return (
             <text
-              key={`mute-${i}`}
+              key={`mute-${stringIdx}`}
               x={x}
               y={nutY - 8}
               fontSize="10"
@@ -164,8 +179,11 @@ export function ChordDiagram({
 
         const firstString = Math.min(...barreStrings.map(s => s.idx));
         const lastString = Math.max(...barreStrings.map(s => s.idx));
-        const x1 = startX + firstString * stringSpacing;
-        const x2 = startX + lastString * stringSpacing;
+        // Convert to visual positions (reversed for left-handed)
+        const visualFirst = getVisualStringIndex(firstString);
+        const visualLast = getVisualStringIndex(lastString);
+        const x1 = startX + Math.min(visualFirst, visualLast) * stringSpacing;
+        const x2 = startX + Math.max(visualFirst, visualLast) * stringSpacing;
         const y = nutY + barreFret * fretHeight - fretHeight / 2;
 
         return (
@@ -184,15 +202,16 @@ export function ChordDiagram({
       })}
 
       {/* Fret markers (finger positions) */}
-      {frets.map((fret, i) => {
+      {frets.map((fret, stringIdx) => {
         if (fret <= 0) return null;
 
-        const x = startX + i * stringSpacing;
+        const visualIdx = getVisualStringIndex(stringIdx);
+        const x = startX + visualIdx * stringSpacing;
         const y = nutY + fret * fretHeight - fretHeight / 2;
-        const finger = fingers?.[i];
+        const finger = fingers?.[stringIdx];
 
         return (
-          <g key={`marker-${i}`}>
+          <g key={`marker-${stringIdx}`}>
             {/* Finger dot */}
             <circle
               cx={x}

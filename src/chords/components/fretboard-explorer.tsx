@@ -22,6 +22,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { useLeftHanded } from "@/chords/providers/left-handed-provider";
 import { cn } from "@/lib/utils";
 
 const KEYS: ChordKey[] = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
@@ -41,6 +42,7 @@ export default function FretboardExplorer() {
   const [selectedVoicingIndex, setSelectedVoicingIndex] = useState(0);
   const [compareVoicingIndex, setCompareVoicingIndex] = useState<number | null>(null);
   const [showAllFrets, setShowAllFrets] = useState(false);
+  const { isLeftHanded } = useLeftHanded();
 
   const { data: fretboardConfig } = useFretboardConfig(6, 24);
   const { data: voicings = [] } = useAllVoicings(
@@ -216,6 +218,7 @@ export default function FretboardExplorer() {
                         position={voicing.position}
                         width={100}
                         height={120}
+                        leftHanded={isLeftHanded}
                         className={cn(
                           "transition-all",
                           isSelected ? "text-primary" : "text-foreground"
@@ -338,12 +341,18 @@ export default function FretboardExplorer() {
                     ))}
 
                     {/* Strings */}
-                    {fretboardConfig.notes.map((stringNotes, stringIdx) => (
+                    {fretboardConfig.notes.map((stringNotes, stringIdx) => {
+                      // For left-handed, reverse the order of strings (show high e first)
+                      const visualStringIdx = isLeftHanded ? 5 - stringIdx : stringIdx;
+                      const reversedNotes = isLeftHanded
+                        ? [...stringNotes].reverse()
+                        : stringNotes;
+                      return (
                       <div key={stringIdx} className="contents">
                         <div className="p-2 font-mono text-muted-foreground">
-                          {["E", "A", "D", "G", "B", "e"][stringIdx]}
+                          {["E", "A", "D", "G", "B", "e"][visualStringIdx]}
                         </div>
-                        {stringNotes.slice(0, 13).map((note, fretIdx) => {
+                        {reversedNotes.slice(0, 13).map((note, fretIdx) => {
                           const isInRegion =
                             !showAllFrets &&
                             fretIdx >= selectedRegion.startFret &&
@@ -363,7 +372,8 @@ export default function FretboardExplorer() {
                           );
                         })}
                       </div>
-                    ))}
+                    );
+                    })}
                   </div>
                 </div>
               </div>

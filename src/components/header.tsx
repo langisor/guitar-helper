@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Hand } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLeftHanded } from "@/chords/providers/left-handed-provider";
+import { Toggle } from "@/components/ui/toggle";
 
 const navItems = [
   { href: "/chords-nav", label: "Chords" },
@@ -14,6 +17,7 @@ const navItems = [
 
 export function Header() {
   const pathname = usePathname();
+  const { isLeftHanded, toggleLeftHanded } = useLeftHanded();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === href;
@@ -43,6 +47,16 @@ export function Header() {
             </Link>
           ))}
         </nav>
+        <div className="ml-3 pl-3 border-l">
+          <Toggle
+            pressed={isLeftHanded}
+            onPressedChange={toggleLeftHanded}
+            aria-label="Toggle left-handed mode"
+            className="h-8 w-8 p-0"
+          >
+            <Hand className="h-4 w-4" />
+          </Toggle>
+        </div>
       </div>
     </header>
   );
