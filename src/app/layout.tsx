@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip"
 import Providers from "@/chords/providers";
-import { LeftHandedProvider } from "@/chords/providers/left-handed-provider";
 
 import "./globals.css";
 import { Header } from "@/components/header";
@@ -33,14 +32,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <LeftHandedProvider>
-          <Providers>
-            <TooltipProvider>
-              <Header />
-              <main className="flex-1">{children}</main>
-            </TooltipProvider>
-          </Providers>
-        </LeftHandedProvider>
+        <Providers>
+          <TooltipProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+          </TooltipProvider>
+        </Providers>
       </body>
     </html>
   );

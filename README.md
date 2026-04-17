@@ -48,3 +48,19 @@ This project follows a clean architecture pattern with clear separation of conce
 - `ChordDiagram` renders a pure SVG fretboard — it's fully standalone and reusable anywhere in your app
 - The `useChord` hook handles the `C#` → `Csharp` key normalization your JSON uses
 - All Shadcn components used: `Badge`, `Button`, `Select`, `Separator` — make sure those are installed via `npx shadcn@latest add badge button select separator`
+
+
+ ## Left-Hand Mode using @hookstate/core
+
+```text
+User toggles in Header
+    ↓
+Hookstate store updates isLeftHanded
+    ↓
+Components using useLeftHanded() re-render
+    ↓
+ChordDiagram receives leftHanded prop
+    ↓
+Strings render in reversed order
+
+```
