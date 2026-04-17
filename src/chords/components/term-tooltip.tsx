@@ -53,13 +53,13 @@ interface TermDefinitionProps {
 }
 
 export function TermDefinition({ term, className }: TermDefinitionProps) {
-  const { data: termData, isLoading } = useTermByName(term);
+  const { data: termData, isLoading, isError } = useTermByName(term);
 
   if (isLoading) {
-    return <span className={cn("animate-pulse", className)}>Loading...</span>;
+    return <span className={cn("animate-pulse", className)}>{term}</span>;
   }
 
-  if (!termData) {
+  if (isError || !termData) {
     return <span className={className}>{term}</span>;
   }
 
