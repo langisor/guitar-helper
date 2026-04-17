@@ -71,6 +71,7 @@ export default function MetronomeTrainer() {
   const audioCtxRef = useRef<AudioContext | null>(null);
   const nextNoteTimeRef = useRef(0);
   const schedulerTimerRef = useRef<number | null>(null);
+  const schedulerRef = useRef<(() => void) | null>(null);
   const lookahead = 25; // ms
   const scheduleAheadTime = 0.1; // s
 
@@ -218,7 +219,7 @@ export default function MetronomeTrainer() {
 
     while (nextNoteTimeRef.current < audioCtxRef.current!.currentTime + scheduleAheadTime) {
       const isDownbeat = currentStep === 0;
-      
+
       if (shouldPlaySound(currentStep)) {
         playClick(isDownbeat, nextNoteTimeRef.current);
       }
@@ -238,24 +239,29 @@ export default function MetronomeTrainer() {
     }
   }, [currentStep, steps.length, getBeatDuration, playClick, shouldPlaySound, handleBarComplete]);
 
+  // Keep scheduler ref up to date
+  useEffect(() => {
+    schedulerRef.current = scheduler;
+  }, [scheduler]);
+
   useEffect(() => {
     if (isPlaying) {
       if (!audioCtxRef.current) {
         audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
-      
+
       // Resume audio context if suspended
       if (audioCtxRef.current.state === "suspended") {
         audioCtxRef.current.resume();
       }
 
       nextNoteTimeRef.current = audioCtxRef.current.currentTime + 0.05;
-      
+
       const runScheduler = () => {
-        scheduler();
+        schedulerRef.current?.();
         schedulerTimerRef.current = window.setTimeout(runScheduler, lookahead);
       };
-      
+
       runScheduler();
     } else {
       if (schedulerTimerRef.current) {
@@ -269,7 +275,7 @@ export default function MetronomeTrainer() {
         clearTimeout(schedulerTimerRef.current);
       }
     };
-  }, [isPlaying, scheduler]);
+  }, [isPlaying]);
 
   // Reset step when subdivision changes
   useEffect(() => {
