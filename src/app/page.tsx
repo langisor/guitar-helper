@@ -149,6 +149,15 @@ export default function Home() {
                 <p>
                   <strong>Half-Step (H):</strong> A distance of one fret.
                 </p>
+                <div className="mt-4 rounded-lg overflow-hidden border">
+                  <Image
+                    src="/images/into/1.2.png"
+                    alt="The Musical Alphabet and Chromatic Scale"
+                    width={800}
+                    height={450}
+                    className="w-full h-auto"
+                  />
+                </div>
                 <p>
                   <strong>Whole Step (W):</strong> A distance of two frets.
                 </p>
