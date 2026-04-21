@@ -23,11 +23,13 @@ interface Fretboard3DProps {
 
 function FretboardMesh({ position, chordName }: Fretboard3DProps) {
   const groupRef = useRef<THREE.Group>(null)
+  const timeRef = useRef(0)
 
-  useFrame((state) => {
+  useFrame((_, delta) => {
+    timeRef.current += delta
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05
-      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.02 - 0.1
+      groupRef.current.rotation.y = Math.sin(timeRef.current * 0.3) * 0.05
+      groupRef.current.rotation.x = Math.sin(timeRef.current * 0.2) * 0.02 - 0.1
     }
   })
 
@@ -243,7 +245,6 @@ function FretboardMesh({ position, chordName }: Fretboard3DProps) {
         color="#e8c97a"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/Geist-Bold.ttf"
       >
         {chordName}
       </Text>
@@ -255,11 +256,11 @@ export function Fretboard3D({ position, chordName }: Fretboard3DProps) {
   return (
     <div className="h-[350px] w-full">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <ambientLight intensity={0.4} />
-        <pointLight position={[5, 5, 5]} intensity={1} />
-        <pointLight position={[-5, 3, 5]} intensity={0.5} color="#e8c97a" />
-        <spotLight position={[0, 5, 3]} angle={0.3} penumbra={1} intensity={0.8} />
-        <Environment preset="studio" />
+        <ambientLight intensity={0.6} />
+        <pointLight position={[5, 5, 5]} intensity={1.2} />
+        <pointLight position={[-5, 3, 5]} intensity={0.8} color="#e8c97a" />
+        <spotLight position={[0, 5, 3]} angle={0.3} penumbra={1} intensity={1} />
+        <Environment preset="sunset" />
         <FretboardMesh position={position} chordName={chordName} />
       </Canvas>
     </div>

@@ -10,8 +10,8 @@ export interface GuitarTunings {
 }
 
 export type ChordKey =
-  | "C" | "C#" | "D" | "Eb" | "E" | "F"
-  | "F#" | "G" | "Ab" | "A" | "Bb" | "B";
+  | "C" | "Csharp" | "C#" | "D" | "Eb" | "E" | "F"
+  | "Fsharp" | "F#" | "G" | "Ab" | "A" | "Bb" | "B";
 
 export type ChordSuffix = "major" | "minor" | "dim" | (string & {});
 

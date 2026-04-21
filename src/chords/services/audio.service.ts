@@ -8,7 +8,7 @@ const NOTE_FILES: Record<string, number[]> = {
   "A#": [2, 3, 4], // As in files
   "Bb": [2, 3, 4], // enharmonic
   "B": [2, 3, 4],
-  "C": [3, 4, 5],
+  "C": [2, 3, 4, 5],
   "C#": [3, 4, 5], // Cs in files
   "Db": [3, 4, 5], // enharmonic
   "D": [2, 3, 4, 5],

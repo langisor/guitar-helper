@@ -16,7 +16,9 @@ const FINGER_COLORS: Record<number, string> = {
   4: "#118AB2",
 }
 
-const KEYS: ChordKey[] = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
+const UI_TO_INTERNAL: Record<string, string> = { "C": "C", "C#": "Csharp", "D": "D", "Eb": "Eb", "E": "E", "F": "F", "F#": "Fsharp", "G": "G", "Ab": "Ab", "A": "A", "Bb": "Bb", "B": "B" }
+const INTERNAL_TO_UI: Record<string, string> = { "C": "C", "Csharp": "C#", "D": "D", "Eb": "Eb", "E": "E", "F": "F", "Fsharp": "F#", "G": "G", "Ab": "Ab", "A": "A", "Bb": "Bb", "B": "B" }
+const KEYS: ChordKey[] = ["C", "Csharp", "D", "Eb", "E", "F", "Fsharp", "G", "Ab", "A", "Bb", "B"]
 const COMMON_SUFFIXES: ChordSuffix[] = ["major", "minor", "7", "maj7", "m7", "dim", "dim7", "aug", "sus4", "9"]
 
 function Ornament({
@@ -63,7 +65,8 @@ export function FretboardDrawer() {
   const [playMode, setPlayMode] = useState<PlayMode>("strum")
   const [view3d, setView3d] = useState(false)
 
-  const { data: chord } = useChordRQ(selectedKey, selectedSuffix)
+  const actualKey = (UI_TO_INTERNAL[selectedKey] || selectedKey) as ChordKey
+  const { data: chord } = useChordRQ(actualKey, selectedSuffix)
   const positions = chord?.positions ?? []
   const position = positions[positionIndex] ?? null
   const audio = useAudioPlayback()
@@ -77,7 +80,8 @@ export function FretboardDrawer() {
     }
   }
 
-  const chordLabel = `${selectedKey} ${selectedSuffix}`
+  const displayKey = INTERNAL_TO_UI[selectedKey] || selectedKey
+  const chordLabel = `${displayKey} ${selectedSuffix}`
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-gradient-to-br from-[#0a0600] via-[#1a0e02] to-[#0d0800] px-4 py-5 font-serif">
@@ -104,8 +108,8 @@ export function FretboardDrawer() {
             className="w-full cursor-pointer appearance-none rounded-lg border border-amber-900/50 bg-[#120a02] px-3 py-2 font-serif text-sm text-amber-200 outline-none [background-image:url('data:image/svg+xml,%3Csvg_xmlns=%27http://www.w3.org/2000/svg%27_width=%2712%27_height=%278%27%3E%3Cpath_d=%27M0_0l6_8_6-8z%27_fill=%27%238B6914%27/%3E%3C/svg%3E')] [background-position:right_10px_center] [background-repeat:no-repeat]"
           >
             {KEYS.map((k) => (
-              <option key={k} value={k}>
-                {k}
+              <option key={k} value={INTERNAL_TO_UI[k] || k}>
+                {INTERNAL_TO_UI[k] || k}
               </option>
             ))}
           </select>
