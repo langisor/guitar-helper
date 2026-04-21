@@ -3,7 +3,7 @@
 import { useState, Suspense } from "react"
 import { cn } from "@/lib/utils"
 import { ChordDiagram } from "@/chords/components/chord-diagram"
-import { Fretboard3D } from "../../../app/drawer/components/fretboard-3d"
+import { Fretboard3D } from "./fretboard-3d"
 import { useChordRQ } from "@/chords/hooks/use-chord"
 import { useAudioPlayback } from "@/chords/hooks/use-audio"
 import type { ChordKey, ChordSuffix } from "@/chords/types/chords.types"
