@@ -1,10 +1,10 @@
 "use client"
 
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, type ReactElement } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { Environment, RoundedBox, Text } from "@react-three/drei"
 import * as THREE from "three"
-import type { ChordPosition } from "@/types/chords"
+import type { ChordPosition } from "../types/chords"
 
 const FINGER_COLORS: Record<number, string> = {
   1: "#FF6B6B",
@@ -77,7 +77,7 @@ function FretboardMesh({ position, chordName }: Fretboard3DProps) {
     if (!position) return null
 
     const { frets, fingers, barres = [] } = position
-    const dots: JSX.Element[] = []
+    const dots: ReactElement[] = []
 
     for (let s = 0; s < numStrings; s++) {
       const fret = frets[s]

@@ -43,8 +43,8 @@ export class GuitarSampler {
   }
 
   private async loadNote(noteName: string): Promise<AudioBuffer | null> {
-    if (this.buffers[noteName]) return this.buffers[noteName]
-    if (this.loading[noteName]) return this.loading[noteName]
+    if (noteName in this.buffers) return this.buffers[noteName]
+    if (noteName in this.loading) return this.loading[noteName]
 
     const ctx = this.ensureCtx()
     this.loading[noteName] = fetch(getAudioFile(noteName))

@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback, Suspense } from "react"
 import { cn } from "@/lib/utils"
 import { ChordDiagram } from "./chord-diagram"
 import { Fretboard3D } from "./fretboard-3d"
-import { sampler } from "@/lib/guitar-sampler"
-import type { ChordsData, ChordPosition, PlayMode } from "@/types/chords"
+import { sampler } from "../lib/guitar-sampler"
+import type { ChordsData, ChordPosition, PlayMode } from "../types/chords"
 
 const FINGER_COLORS: Record<number, string> = {
   1: "#FF6B6B",
