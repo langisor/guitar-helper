@@ -1,6 +1,6 @@
 "use client";
 
-import type { ChordPosition } from "../types/chords";
+import type { ChordPosition } from "@/chords/types/chords.types";
 
 const FINGER_COLORS: Record<number, string> = {
   1: "#FF6B6B",

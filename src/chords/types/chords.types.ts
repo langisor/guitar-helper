@@ -37,3 +37,5 @@ export interface GuitarData {
   suffixes: ChordSuffix[];
   chords: Partial<Record<ChordKey, Chord[]>>;
 }
+
+export type PlayMode = "strum" | "arpeggio"

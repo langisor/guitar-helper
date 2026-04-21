@@ -4,7 +4,7 @@ import { useRef, useMemo, type ReactElement } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { Environment, RoundedBox, Text } from "@react-three/drei"
 import * as THREE from "three"
-import type { ChordPosition } from "../types/chords"
+import type { ChordPosition } from "@/chords/types/chords.types"
 
 const FINGER_COLORS: Record<number, string> = {
   1: "#FF6B6B",

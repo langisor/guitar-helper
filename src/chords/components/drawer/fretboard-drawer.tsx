@@ -1,11 +1,13 @@
 "use client"
 
-import { useState, useEffect, useCallback, Suspense } from "react"
+import { useState, Suspense } from "react"
 import { cn } from "@/lib/utils"
-import { ChordDiagram } from "./chord-diagram"
-import { Fretboard3D } from "./fretboard-3d"
-import { sampler } from "../lib/guitar-sampler"
-import type { ChordsData, ChordPosition, PlayMode } from "../types/chords"
+import { ChordDiagram } from "@/chords/components/chord-diagram"
+import { Fretboard3D } from "../../../app/drawer/components/fretboard-3d"
+import { useChordRQ } from "@/chords/hooks/use-chord"
+import { useAudioPlayback } from "@/chords/hooks/use-audio"
+import type { ChordKey, ChordSuffix } from "@/chords/types/chords.types"
+import type { PlayMode } from "@/chords/types/chords.types"
 
 const FINGER_COLORS: Record<number, string> = {
   1: "#FF6B6B",
@@ -14,8 +16,8 @@ const FINGER_COLORS: Record<number, string> = {
   4: "#118AB2",
 }
 
-const KEYS = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
-const COMMON_SUFFIXES = ["major", "minor", "7", "maj7", "m7", "dim", "dim7", "aug", "sus4", "sus2", "9", "11", "add9"]
+const KEYS: ChordKey[] = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
+const COMMON_SUFFIXES: ChordSuffix[] = ["major", "minor", "7", "maj7", "m7", "dim", "dim7", "aug", "sus4", "9"]
 
 function Ornament({
   pos,
@@ -55,47 +57,25 @@ function SymbolRow({ symbol, label, color }: { symbol: string; label: string; co
 }
 
 export function FretboardDrawer() {
-  const [chordsData, setChordsData] = useState<ChordsData | null>(null)
-  const [selectedKey, setSelectedKey] = useState("C")
-  const [selectedSuffix, setSelectedSuffix] = useState("major")
+  const [selectedKey, setSelectedKey] = useState<ChordKey>("C")
+  const [selectedSuffix, setSelectedSuffix] = useState<ChordSuffix>("major")
   const [positionIndex, setPositionIndex] = useState(0)
   const [playMode, setPlayMode] = useState<PlayMode>("strum")
-  const [isPlaying, setIsPlaying] = useState(false)
   const [view3d, setView3d] = useState(false)
-  const [loaded, setLoaded] = useState(false)
 
-  // Load chords.json
-  useEffect(() => {
-    fetch("/chords.json")
-      .then((r) => r.json())
-      .then((data: ChordsData) => {
-        setChordsData(data)
-        setLoaded(true)
-      })
-      .catch(() => {
-        setLoaded(true)
-      })
-  }, [])
+  const { data: chord } = useChordRQ(selectedKey, selectedSuffix)
+  const positions = chord?.positions ?? []
+  const position = positions[positionIndex] ?? null
+  const audio = useAudioPlayback()
 
-  const currentChord = chordsData?.chords?.[selectedKey]?.find((c) => c.suffix === selectedSuffix)
-  const positions = currentChord?.positions ?? []
-  const position: ChordPosition | null = positions[positionIndex] ?? null
-
-  const handlePlay = useCallback(async () => {
-    if (!position || isPlaying) return
-    setIsPlaying(true)
-    try {
-      if (playMode === "strum") {
-        await sampler.strumChord(position.frets, position.baseFret)
-        setTimeout(() => setIsPlaying(false), 600)
-      } else {
-        await sampler.arpeggiate(position.frets, position.baseFret)
-        setTimeout(() => setIsPlaying(false), 1200)
-      }
-    } catch {
-      setIsPlaying(false)
+  const handlePlay = () => {
+    if (!position || audio.isPlaying) return
+    if (playMode === "strum") {
+      audio.playChord(position, 2)
+    } else {
+      audio.playChord(position, 1)
     }
-  }, [position, isPlaying, playMode])
+  }
 
   const chordLabel = `${selectedKey} ${selectedSuffix}`
 
@@ -118,7 +98,7 @@ export function FretboardDrawer() {
           <select
             value={selectedKey}
             onChange={(e) => {
-              setSelectedKey(e.target.value)
+              setSelectedKey(e.target.value as ChordKey)
               setPositionIndex(0)
             }}
             className="w-full cursor-pointer appearance-none rounded-lg border border-amber-900/50 bg-[#120a02] px-3 py-2 font-serif text-sm text-amber-200 outline-none [background-image:url('data:image/svg+xml,%3Csvg_xmlns=%27http://www.w3.org/2000/svg%27_width=%2712%27_height=%278%27%3E%3Cpath_d=%27M0_0l6_8_6-8z%27_fill=%27%238B6914%27/%3E%3C/svg%3E')] [background-position:right_10px_center] [background-repeat:no-repeat]"
@@ -137,7 +117,7 @@ export function FretboardDrawer() {
           <select
             value={selectedSuffix}
             onChange={(e) => {
-              setSelectedSuffix(e.target.value)
+              setSelectedSuffix(e.target.value as ChordSuffix)
               setPositionIndex(0)
             }}
             className="w-full cursor-pointer appearance-none rounded-lg border border-amber-900/50 bg-[#120a02] px-3 py-2 font-serif text-sm text-amber-200 outline-none [background-image:url('data:image/svg+xml,%3Csvg_xmlns=%27http://www.w3.org/2000/svg%27_width=%2712%27_height=%278%27%3E%3Cpath_d=%27M0_0l6_8_6-8z%27_fill=%27%238B6914%27/%3E%3C/svg%3E')] [background-position:right_10px_center] [background-repeat:no-repeat]"
@@ -223,7 +203,7 @@ export function FretboardDrawer() {
                     filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.7))",
                   }}
                 >
-                  <ChordDiagram position={position} chordName={chordLabel} width={220} height={260} />
+                  <ChordDiagram position={position} width={220} height={260} />
                 </div>
 
                 {/* Finger Legend */}
@@ -298,16 +278,16 @@ export function FretboardDrawer() {
           {/* Play button */}
           <button
             onClick={handlePlay}
-            disabled={!position || isPlaying}
+            disabled={!position || audio.isPlaying}
             className={cn(
               "rounded-lg border-none px-7 py-2 font-serif text-[13px] font-bold tracking-[2px] text-[#0a0600] transition-all",
-              isPlaying
+              audio.isPlaying
                 ? "scale-[0.97] bg-gradient-to-br from-amber-700 to-amber-800 shadow-none"
                 : "bg-gradient-to-br from-amber-400 to-amber-700 shadow-[0_4px_20px_rgba(201,162,39,0.4)]",
               !position && "cursor-default opacity-50"
             )}
           >
-            {isPlaying ? "♩ Playing…" : "▶ Play"}
+            {audio.isPlaying ? "♩ Playing…" : "▶ Play"}
           </button>
         </div>
       </div>
@@ -328,7 +308,7 @@ export function FretboardDrawer() {
                     : "border-amber-900/20 bg-gradient-to-br from-[#140c02] to-[#0d0800] shadow-[0_4px_16px_rgba(0,0,0,0.5)]"
                 )}
               >
-                <ChordDiagram position={pos} chordName={`${chordLabel}-${i}`} width={100} height={120} />
+                <ChordDiagram position={pos} width={100} height={120} />
                 <div className="mt-1 text-center text-[9px] tracking-wider text-amber-800">
                   {pos.baseFret > 1 ? `Fret ${pos.baseFret}` : "Open"}
                 </div>
