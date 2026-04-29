@@ -9,6 +9,7 @@ import {
   GraduationCap,
   ArrowRight,
   Timer,
+  Palette,
 } from "lucide-react";
 import {
   Card,
@@ -42,6 +43,13 @@ const tools = [
     href: "/fretboard",
     icon: Layers,
     color: "bg-green-500/10 text-green-600",
+  },
+  {
+    title: "Chord Studio",
+    description: "Interactive chord atlas with 2D/3D diagrams and audio playback",
+    href: "/studio",
+    icon: Palette,
+    color: "bg-amber-500/10 text-amber-600",
   },
   {
     title: "Metronome Trainer",
@@ -697,7 +705,7 @@ export default function Home() {
       <section className="px-4 md:px-8 py-12">
         <div className="mx-auto max-w-4xl">
           <h2 className="text-2xl font-bold text-center mb-8">Put Theory into Practice</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
             {tools.map((tool) => (
               <Link key={tool.href} href={tool.href}>
                 <Card className="h-full border shadow-sm hover:shadow-md transition-all cursor-pointer group hover:-translate-y-1">

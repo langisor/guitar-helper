@@ -8,28 +8,19 @@ interface ChordDiagramProps {
   width?: number;
   height?: number;
   className?: string;
-  leftHanded?: boolean;
 }
 
 const STRING_NAMES_STANDARD = ["E", "A", "D", "G", "B", "e"];
-const STRING_NAMES_LEFT_HANDED = ["e", "B", "G", "D", "A", "E"];
 
 export function ChordDiagram({
   position,
   width = 140,
   height = 160,
   className,
-  leftHanded = false,
 }: ChordDiagramProps) {
   const { frets, fingers, baseFret, barres = [] } = position;
 
-  // Helper to get string index for left-handed display
-  // In left-handed mode, string 5 (high e) is visually at position 0 (leftmost)
-  // and string 0 (low E) is visually at position 5 (rightmost)
-  const getVisualStringIndex = (stringIndex: number) =>
-    leftHanded ? 5 - stringIndex : stringIndex;
-
-  const stringNames = leftHanded ? STRING_NAMES_LEFT_HANDED : STRING_NAMES_STANDARD;
+  const stringNames = STRING_NAMES_STANDARD;
 
   const maxFrets = 6;
   const stringCount = 6;
@@ -65,9 +56,7 @@ export function ChordDiagram({
       {/* Vertical strings */}
       {Array.from({ length: stringCount }).map((_, visualIdx) => {
         const x = startX + visualIdx * stringSpacing;
-        // For string thickness: in standard mode, outer strings (0 and 5) are thicker
-        // In left-handed mode, we need to check the original string index
-        const originalIdx = leftHanded ? 5 - visualIdx : visualIdx;
+        const originalIdx = visualIdx;
         return (
           <line
             key={`string-${visualIdx}`}
@@ -131,8 +120,7 @@ export function ChordDiagram({
 
       {/* Open (O) and Mute (X) indicators */}
       {frets.map((fret, stringIdx) => {
-        const visualIdx = getVisualStringIndex(stringIdx);
-        const x = startX + visualIdx * stringSpacing;
+        const x = startX + stringIdx * stringSpacing;
         if (fret === 0) {
           // Open string - circle
           return (
@@ -179,11 +167,8 @@ export function ChordDiagram({
 
         const firstString = Math.min(...barreStrings.map(s => s.idx));
         const lastString = Math.max(...barreStrings.map(s => s.idx));
-        // Convert to visual positions (reversed for left-handed)
-        const visualFirst = getVisualStringIndex(firstString);
-        const visualLast = getVisualStringIndex(lastString);
-        const x1 = startX + Math.min(visualFirst, visualLast) * stringSpacing;
-        const x2 = startX + Math.max(visualFirst, visualLast) * stringSpacing;
+        const x1 = startX + Math.min(firstString, lastString) * stringSpacing;
+        const x2 = startX + Math.max(firstString, lastString) * stringSpacing;
         const y = nutY + barreFret * fretHeight - fretHeight / 2;
 
         return (
@@ -205,8 +190,7 @@ export function ChordDiagram({
       {frets.map((fret, stringIdx) => {
         if (fret <= 0) return null;
 
-        const visualIdx = getVisualStringIndex(stringIdx);
-        const x = startX + visualIdx * stringSpacing;
+        const x = startX + stringIdx * stringSpacing;
         const y = nutY + fret * fretHeight - fretHeight / 2;
         const finger = fingers?.[stringIdx];
 
