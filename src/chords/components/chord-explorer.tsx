@@ -53,6 +53,15 @@ export default function ChordExplorer() {
     }
   };
 
+  const handleSelectPosition = async (index: number) => {
+    setPositionIndex(index);
+    const position = positions[index];
+    if (position && isReady && chord) {
+      await preloadChord(chord, index);
+      playChord(position, 2);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 p-4 md:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
@@ -182,7 +191,7 @@ export default function ChordExplorer() {
                 {positions.map((pos, i) => (
                   <button
                     key={i}
-                    onClick={() => setPositionIndex(i)}
+                    onClick={() => handleSelectPosition(i)}
                     className={cn(
                       "group relative flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all hover:bg-accent",
                       positionIndex === i
