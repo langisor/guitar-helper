@@ -50,11 +50,13 @@ export function useAudioPlayback() {
 
   const playChord = useCallback((position: ChordPosition, duration: number = 2) => {
     if (!engineRef.current || !state.isReady) return;
+    engineRef.current.resume();
     engineRef.current.playChord(position, 0, duration);
   }, [state.isReady]);
 
   const playNote = useCallback((midi: number, duration?: number) => {
     if (!engineRef.current || !state.isReady) return;
+    engineRef.current.resume();
     engineRef.current.playNote(midi, 0, duration);
   }, [state.isReady]);
 
@@ -63,6 +65,8 @@ export function useAudioPlayback() {
     onStepChange?: (index: number) => void
   ) => {
     if (!engineRef.current || !state.isReady || chords.length === 0) return;
+
+    engineRef.current.resume();
 
     setState(prev => ({ 
       ...prev, 
