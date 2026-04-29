@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developer Documentation</title>
+  </head>
+  <body>
+    <h1>Chord Viewer</h1>
+    <p>
+      An interactive guitar chord and music theory visualization application
+      built with Next.js 16, React 19, and TypeScript. Features chord
+      exploration, progression building, fretboard visualization, a metronome
+      trainer, and a music theory terms glossary.
+    </p>
+    <h2>Features</h2>
+    <ul>
+      <li>
+        <strong>Chord Explorer</strong> (<code>/chords-nav</code>) — Browse
+        chords by musical key and suffix with interactive SVG fretboard diagrams
+        and audio playback
+      </li>
+      <li>
+        <strong>Progression Builder</strong> (<code>/progressions</code>) —
+        Build chord progressions using Roman numeral analysis with voice leading
+        optimization and common progression presets
+      </li>
+      <li>
+        <strong>Fretboard Explorer</strong> (<code>/fretboard</code>) —
+        Visualize chord positions across the entire fretboard with voicing
+        analysis
+      </li>
+      <li>
+        <strong>Metronome Trainer</strong> (<code>/metro-trainer</code>) —
+        Precision timing practice with mute modes, auto tempo ramping, and
+        strumming pattern visualization
+      </li>
+      <li>
+        <strong>Terms Glossary</strong> (<code>/terms</code>) — Searchable
+        reference for guitar and music theory terminology
+      </li>
+      <li>
+        <strong>Left-Handed Mode</strong> — Global toggle that reverses string
+        order across all diagrams
+      </li>
+      <li>
+        <strong>Audio Playback</strong> — Browser-based guitar sampler for
+        strumming and arpeggio playback
+      </li>
+    </ul>
+    <h2>Tech Stack</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Technology</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Framework</td>
+          <td>Next.js 16.2.4 (App Router)</td>
+        </tr>
+        <tr>
+          <td>React</td>
+          <td>19.2.4 with React Compiler enabled</td>
+        </tr>
+        <tr>
+          <td>Language</td>
+          <td>TypeScript 5</td>
+        </tr>
+        <tr>
+          <td>Styling</td>
+          <td>Tailwind CSS v4</td>
+        </tr>
+        <tr>
+          <td>State (Global)</td>
+          <td>@hookstate/core</td>
+        </tr>
+        <tr>
+          <td>State (Server)</td>
+          <td>@tanstack/react-query</td>
+        </tr>
+        <tr>
+          <td>UI Components</td>
+          <td>
+            shadcn/ui (manually maintained in <code>src/components/ui/</code>)
+          </td>
+        </tr>
+        <tr>
+          <td>Audio</td>
+          <td>Web Audio API with custom guitar sampler</td>
+        </tr>
+        <tr>
+          <td>3D</td>
+          <td>@react-three/fiber + @react-three/drei</td>
+        </tr>
+        <tr>
+          <td>Charts</td>
+          <td>recharts</td>
+        </tr>
+        <tr>
+          <td>Icons</td>
+          <td>lucide-react</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>Developer Commands</h2>
+    <pre><code class="language-bash">npm run dev      # Start dev server (Turbopack)
+npm run build    # Production build
+npm run start    # Run production server
+npm run lint     # ESLint (no typecheck or test scripts)
+</code></pre>
+    <h2>Project Structure</h2>
+    <p>
+      All source code lives under <code>src/</code>. The <code>@/*</code> path
+      alias maps to <code>./src/*</code>.
+    </p>
+    <pre><code class="language-text">src/
+├── app/                          # Next.js App Router pages
+│   ├── page.tsx                  # Landing page with feature cards
+│   ├── layout.tsx                # Root layout (fonts, providers, header)
+│   ├── chords-nav/               # Chord Explorer page
+│   ├── progressions/             # Progression Builder page
+│   ├── fretboard/                # Fretboard Explorer page
+│   ├── metro-trainer/            # Metronome Trainer page
+│   ├── terms/                    # Terms Glossary page
+│   └── globals.css               # Tailwind CSS entry + theme tokens
+│
+├── chords/                       # Core domain: chords &amp; music theory
+│   ├── actions/                  # Server Actions (&quot;use server&quot;)
+│   │   ├── chords.actions.ts
+│   │   ├── fretboard.actions.ts
+│   │   ├── progressions.actions.ts
+│   │   └── terms.actions.ts
+│   ├── components/               # Domain-specific components
+│   │   ├── chord-diagram.tsx       # SVG fretboard renderer
+│   │   ├── chord-explorer.tsx      # Chord search &amp; selection UI
+│   │   ├── fretboard-explorer.tsx  # Fretboard visualization UI
+│   │   ├── progression-builder.tsx # Progression composer UI
+│   │   ├── metronome-trainer.tsx   # Metronome UI
+│   │   ├── guitar-hero-mode.tsx    # Game/training overlay
+│   │   ├── term-search.tsx         # Glossary search UI
+│   │   └── term-tooltip.tsx        # Inline term definitions
+│   ├── data/                     # Static JSON datasets
+│   │   ├── chords.json             # Full chord database (~1MB)
+│   │   ├── songs.json              # Song references
+│   │   ├── strumming.json          # Strumming patterns
+│   │   └── terms.json              # Music theory terms
+│   ├── hooks/                    # Domain-specific React hooks
+│   │   ├── use-chord.ts            # React Query wrappers for chords
+│   │   ├── use-fretboard.ts        # Fretboard data hooks
+│   │   ├── use-progression.ts      # Progression state hooks
+│   │   ├── use-audio.ts            # Audio playback hooks
+│   │   └── use-terms.ts            # Terms glossary hooks
+│   ├── lib/                      # Domain utilities
+│   ├── providers/                # Context providers
+│   │   └── left-handed-provider.tsx # Global left-handed toggle state
+│   ├── providers.tsx             # QueryClientProvider setup
+│   ├── repositories/             # Data access layer
+│   │   ├── chords.repository.ts    # JSON loading + in-memory index
+│   │   └── terms.repository.ts
+│   ├── services/                 # Business logic layer
+│   │   ├── chords.service.ts
+│   │   ├── fretboard.service.ts
+│   │   ├── progressions.service.ts
+│   │   ├── audio.service.ts
+│   │   ├── guitar-sampler.service.ts
+│   │   └── terms.service.ts
+│   └── types/                    # TypeScript domain types
+│       ├── chords.types.ts
+│       ├── fretboard.types.ts
+│       ├── progression.types.ts
+│       └── terms.types.ts
+│
+├── components/                   # Shared UI components
+│   ├── ui/                       # shadcn/ui components (manual)
+│   └── header.tsx                # App header with nav + left-hand toggle
+│
+├── hooks/                        # Generic hooks
+│   └── use-mobile.ts
+│
+└── lib/                          # Shared utilities
+    └── utils.ts                  # cn() helper, etc.
+</code></pre>
+    <h2>Architecture</h2>
+    <h3>Data Flow</h3>
+    <pre><code class="language-text">UI Components (Client)
+        ↓
+   React Query Hooks
+        ↓
+   Server Actions (&quot;use server&quot;)
+        ↓
+   Services (singleton business logic)
+        ↓
+   Repositories (data access + caching)
+        ↓
+   JSON Files / Static Data
+</code></pre>
+    <h3>Component Split</h3>
+    <ul>
+      <li>
+        <strong>Server Components</strong> (<code>src/app/*/page.tsx</code>) —
+        Fetch initial data, render static shell
+      </li>
+      <li>
+        <strong>Client Components</strong>
+        (<code>src/chords/components/*.tsx</code>) — Handle interactivity,
+        state, and user events
+      </li>
+      <li>
+        <strong>Reusable Components</strong>
+        (<code>src/chords/components/chord-diagram.tsx</code>) — Pure rendering
+        units (SVG, etc.)
+      </li>
+    </ul>
+    <h3>Key Conventions</h3>
+    <ul>
+      <li>
+        <strong>Chord key normalization</strong>: The JSON data uses
+        <code>Csharp</code> instead of <code>C#</code>. The
+        <code>useChord</code> hook and services handle conversion automatically.
+      </li>
+      <li>
+        <strong>Path alias</strong>: Use <code>@/chords/...</code>,
+        <code>@/components/ui/...</code>, etc. Never use relative imports
+        crossing domain boundaries.
+      </li>
+      <li>
+        <strong>shadcn/ui</strong>: All components are manually maintained in
+        <code>src/components/ui/</code>. Do not run
+        <code>npx shadcn</code> commands.
+      </li>
+      <li>
+        <strong>Tailwind v4</strong>: No <code>postcss.config.js</code> — CSS is
+        bundled by Next.js. Theme tokens are in
+        <code>src/app/globals.css</code>.
+      </li>
+      <li>
+        <strong>React Compiler</strong>: Enabled in <code>next.config.ts</code>.
+        Follow compiler-specific syntax requirements for memoization.
+      </li>
+    </ul>
+    <h2>State Management</h2>
+    <h3>Global State — @hookstate/core</h3>
+    <p>
+      Used for lightweight global flags that many components need synchronously.
+    </p>
+    <pre><code class="language-tsx">// src/chords/providers/left-handed-provider.tsx
+import { hookstate, useHookstate } from &quot;@hookstate/core&quot;;
+
+const leftHandedState = hookstate(false);
+
+export function useLeftHanded() {
+  const state = useHookstate(leftHandedState);
+  return {
+    isLeftHanded: state.value,
+    setLeftHanded: (value: boolean) =&gt; state.set(value),
+    toggleLeftHanded: () =&gt; state.set((prev) =&gt; !prev),
+  };
+}
+</code></pre>
+    <p><strong>Usage in any client component:</strong></p>
+    <pre><code class="language-tsx">import { useLeftHanded } from &quot;@/chords/providers/left-handed-provider&quot;;
+
+function MyComponent() {
+  const { isLeftHanded, toggleLeftHanded } = useLeftHanded();
+  // ...
+}
+</code></pre>
+    <h3>Server-State — @tanstack/react-query</h3>
+    <p>
+      All async data fetching goes through React Query hooks in
+      <code>src/chords/hooks/</code>.
+    </p>
+    <p>
+      <strong>QueryClient defaults</strong> (from
+      <code>src/chords/providers.tsx</code>):
+    </p>
+    <pre><code class="language-ts">staleTime: 1000 * 60 * 10,   // 10 minutes
+gcTime: 1000 * 60 * 30,      // 30 minutes
+refetchOnWindowFocus: false,
+retry: 1,
+</code></pre>
+    <h2>Usage Examples</h2>
+    <h3>Fetching Chord Data</h3>
+    <pre><code class="language-tsx">import { useChordKeys, useChordSuffixes, useChordRQ } from &quot;@/chords/hooks/use-chord&quot;;
+import { ChordDiagram } from &quot;@/chords/components/chord-diagram&quot;;
+
+function ChordPage() {
+  const { data: keys } = useChordKeys();
+  const { data: suffixes } = useChordSuffixes();
+  const { data: chord } = useChordRQ(&quot;G&quot;, &quot;major&quot;);
+
+  return (
+    &lt;div&gt;
+      {chord?.positions.map((pos, i) =&gt; (
+        &lt;ChordDiagram
+          key={i}
+          position={pos}
+          chordName={`${chord.key} ${chord.suffix}`}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+    <h3>Accessing the Service Layer Directly</h3>
+    <p>
+      Server Actions are the preferred entry point, but services can be used
+      directly in server contexts:
+    </p>
+    <pre><code class="language-ts">import { ChordsService } from &quot;@/chords/services/chords.service&quot;;
+
+const service = ChordsService.getInstance();
+const chord = await service.getChordDetail(&quot;C&quot;, &quot;major&quot;);
+const keys = await service.getAvailableKeys();
+</code></pre>
+    <h3>Using the Fretboard Hook</h3>
+    <pre><code class="language-tsx">import { useAllVoicings, useFretboardConfig } from &quot;@/chords/hooks/use-fretboard&quot;;
+
+function FretboardPage() {
+  const { data: config } = useFretboardConfig(6, 24);
+  const { data: voicings } = useAllVoicings(&quot;C&quot;, &quot;major&quot;);
+
+  // voicings contains fingering analysis, voice leading, difficulty ratings
+}
+</code></pre>
+    <h3>Audio Playback</h3>
+    <pre><code class="language-tsx">import { useAudio } from &quot;@/chords/hooks/use-audio&quot;;
+
+function PlaybackButton({ chord }) {
+  const { playChord, isPlaying, stop } = useAudio();
+
+  return (
+    &lt;button
+      onClick={() =&gt;
+        isPlaying ? stop() : playChord(chord.positions[0], &quot;strum&quot;)
+      }
+    &gt;
+      {isPlaying ? &quot;Stop&quot; : &quot;Play&quot;}
+    &lt;/button&gt;
+  );
+}
+</code></pre>
+    <h2>Type System</h2>
+    <h3>Core Types (<code>src/chords/types/chords.types.ts</code>)</h3>
+    <pre><code class="language-ts">export interface Chord {
+  key: ChordKey;           // &quot;C&quot; | &quot;Csharp&quot; | &quot;D&quot; | ...
+  suffix: ChordSuffix;     // &quot;major&quot; | &quot;minor&quot; | &quot;dim&quot; | ...
+  positions: ChordPosition[];
+}
+
+export interface ChordPosition {
+  frets: number[];         // -1 = mute, 0 = open, 1+ = fret
+  fingers: number[];         // 0–4
+  baseFret: number;
+  barres: number[];
+  midi: number[];
+}
+</code></pre>
+    <h3>
+      Progression Types (<code>src/chords/types/progression.types.ts</code>)
+    </h3>
+    <pre><code class="language-ts">export interface ChordProgression {
+  id: string;
+  name: string;
+  key: ChordKey;
+  mode: ScaleMode;         // &quot;major&quot; | &quot;minor&quot; | &quot;dorian&quot; | ...
+  steps: ProgressionStep[];
+  tags: string[];
+}
+
+export interface ProgressionStep {
+  id: string;
+  roman: ParsedRoman;
+  chord?: Chord;
+  positionIndex: number;
+  optional: boolean;
+}
+</code></pre>
+    <h2>Left-Handed Mode</h2>
+    <p>Toggle via the hand icon in the app header. When enabled:</p>
+    <ul>
+      <li>
+        <code>ChordDiagram</code> renders strings in reversed order (low-E on
+        the right)
+      </li>
+      <li>All fretboard visualizations mirror horizontally</li>
+      <li>
+        State is managed globally via <code>@hookstate/core</code> so every
+        diagram updates instantly
+      </li>
+    </ul>
+    <h2>Audio Architecture</h2>
+    <p>
+      The <code>AudioService</code> and <code>GuitarSamplerService</code> use
+      the Web Audio API to synthesize guitar-like tones:
+    </p>
+    <ul>
+      <li>
+        <strong>Sampler</strong> — Loads/decodes audio buffers for plucked
+        string sounds
+      </li>
+      <li>
+        <strong>Playback modes</strong> — <code>strum</code> (all notes with
+        slight delays) and <code>arpeggio</code> (sequential)
+      </li>
+      <li>
+        <strong>Mute detection</strong> — Respects <code>-1</code> (muted
+        string) values in <code>ChordPosition.frets</code>
+      </li>
+    </ul>
+    <h2>JSON Data Sources</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>src/chords/data/chords.json</code></td>
+          <td>1MB+ chord database with positions, fingerings, MIDI notes</td>
+        </tr>
+        <tr>
+          <td><code>src/chords/data/terms.json</code></td>
+          <td>Music theory glossary with definitions and categories</td>
+        </tr>
+        <tr>
+          <td><code>src/chords/data/songs.json</code></td>
+          <td>Song references for progression examples</td>
+        </tr>
+        <tr>
+          <td><code>src/chords/data/strumming.json</code></td>
+          <td>Strumming pattern definitions</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      The <code>ChordsRepository</code> loads <code>chords.json</code> once at
+      runtime, builds an in-memory index (<code>Map&lt;string, Chord[]&gt;</code
+      >), and serves all subsequent lookups from cache.
+    </p>
+    <h2>Adding a New Page</h2>
+    <ol>
+      <li>
+        Create <code>src/app/my-feature/page.tsx</code> as a Server Component
+      </li>
+      <li>
+        Create <code>src/chords/components/my-feature.tsx</code> as the
+        interactive Client Component
+      </li>
+      <li>
+        Add server actions in
+        <code>src/chords/actions/my-feature.actions.ts</code> if needed
+      </li>
+      <li>Add types in <code>src/chords/types/my-feature.types.ts</code></li>
+      <li>
+        Add the route to <code>navItems</code> in
+        <code>src/components/header.tsx</code>
+      </li>
+    </ol>
+    <h2>Notes for AI Agents</h2>
+    <ul>
+      <li>
+        This is <strong>Next.js 16</strong> — read guides in
+        <code>node_modules/next/dist/docs/</code> before writing code; APIs may
+        differ from older versions.
+      </li>
+      <li>
+        The <strong>React Compiler</strong> is enabled. Avoid manual
+        <code>useMemo</code>/<code>useCallback</code> unless the compiler fails.
+      </li>
+      <li>
+        <strong>Do not</strong> run <code>npx shadcn</code> commands. Components
+        are manually maintained.
+      </li>
+      <li>
+        Keep Server Components in <code>src/app/</code> and interactive Client
+        Components in <code>src/chords/components/</code>.
+      </li>
+    </ul>
+  </body>
+</html>
