@@ -1,36 +1,14 @@
-"use client";
-
 import { ChordDiagram } from "@/chords/components/chord-diagram";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerClose,
-} from "@/components/ui/drawer";
-import { HelpCircle, X } from "lucide-react";
-
-const DEMO_POSITION = {
-  frets: [0, 2, 2, 1, 0, -1],
-  fingers: [0, 2, 3, 1, 0, 0],
-  baseFret: 1,
-  barres: [],
-  midi: [40, 45, 50, 55, 59, 0],
-};
+import { Card, CardContent } from "@/components/ui/card";
 
 const CHORD_DIAGRAM_CONTENT = (
   <>
     <section className="mb-6">
       <h3 className="text-lg font-semibold mb-2">What is a Chord Diagram?</h3>
       <p className="text-muted-foreground text-sm leading-relaxed">
-        A chord diagram (also called a chord chart or chord box) is a visual 
-        representation showing exactly where to place your fingers on the fretboard 
-        to play a specific chord. It's like a map of the guitar neck from the player's 
+        A chord diagram (also called a chord chart or chord box) is a visual
+        representation showing exactly where to place your fingers on the fretboard
+        to play a specific chord. It&apos;s like a map of the guitar neck from the player&apos;s
         perspective, showing strings and frets from above.
       </p>
     </section>
@@ -52,11 +30,11 @@ const CHORD_DIAGRAM_CONTENT = (
         </div>
         <div className="p-3 bg-muted rounded">
           <strong className="text-foreground">O = Open String</strong>
-          <p className="text-xs mt-1">An "O" above a string means play it open (without pressing any fret).</p>
+          <p className="text-xs mt-1">An &quot;O&quot; above a string means play it open (without pressing any fret).</p>
         </div>
         <div className="p-3 bg-muted rounded">
           <strong className="text-foreground">X = Muted String</strong>
-          <p className="text-xs mt-1">An "X" above a string means don't play that string (mute it with your fretting hand).</p>
+          <p className="text-xs mt-1">An &quot;X&quot; above a string means don&apos;t play that string (mute it with your fretting hand).</p>
         </div>
       </div>
     </section>
@@ -98,64 +76,46 @@ const CHORD_DIAGRAM_CONTENT = (
     <section>
       <h3 className="text-lg font-semibold mb-2">Base Fret Indicator</h3>
       <div className="space-y-2 text-sm text-muted-foreground">
-        <p>When a chord uses frets higher than the first fret, a number appears on the left side showing the "base fret."</p>
-        <p>Example: If you see "3" on the left, the chord starts at the 3rd fret. All finger positions are relative to that base fret.</p>
+        <p>When a chord uses frets higher than the first fret, a number appears on the left side showing the &quot;base fret.&quot;</p>
+        <p>Example: If you see &quot;3&quot; on the left, the chord starts at the 3rd fret. All finger positions are relative to that base fret.</p>
       </div>
     </section>
   </>
 );
 
-export default function Page() {
+const DEMO_POSITION = {
+  frets: [0, 2, 2, 1, 0, -1],
+  fingers: [0, 2, 3, 1, 0, 0],
+  baseFret: 1,
+  barres: [],
+  midi: [40, 45, 50, 55, 59, 0],
+};
+
+export default function ChordDiagramContent() {
+  return CHORD_DIAGRAM_CONTENT;
+}
+
+export function ChordDiagramDemo() {
   return (
-    <Drawer direction="top">
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/50 shadow-sm px-4 py-3 flex items-center justify-between">
-        <CardTitle className="text-lg">Chord Diagram</CardTitle>
-        <DrawerTrigger asChild>
-          <Button variant="outline" size="sm" className="gap-1.5 hover:bg-primary/10 hover:border-primary/30 transition-colors">
-            <HelpCircle className="h-4 w-4" />
-            What's Chord Diagram
-          </Button>
-        </DrawerTrigger>
-      </div>
-      <DrawerContent className="h-[85vh]">
-        <DrawerHeader className="text-left border-b">
-          <DrawerTitle>How to Read Chord Diagrams</DrawerTitle>
-          <DrawerDescription>
-            A complete guide to understanding chord diagrams and finger positions
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="p-6 overflow-y-auto h-[calc(85vh-140px)]">
-          {CHORD_DIAGRAM_CONTENT}
+    <div className="p-4 md:p-8">
+      <div className="mx-auto max-w-2xl space-y-8">
+        <div className="text-center space-y-4">
+          <h1 className="text-3xl font-bold">Chord Diagram</h1>
+          <p className="text-lg text-muted-foreground max-w-lg mx-auto">
+            Visual representation of guitar chord fingerings
+          </p>
         </div>
-        <DrawerFooter className="border-t">
-          <DrawerClose asChild>
-            <Button variant="outline">
-              <X className="h-4 w-4 mr-2" />
-              Close
-            </Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-      <div className="p-4 md:p-8">
-        <div className="mx-auto max-w-2xl space-y-8">
-          <div className="text-center space-y-4">
-            <h1 className="text-3xl font-bold">Chord Diagram</h1>
-            <p className="text-lg text-muted-foreground max-w-lg mx-auto">
-              Visual representation of guitar chord fingerings
-            </p>
-          </div>
-          <Card className="border border-border/50 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardContent className="p-8 flex justify-center">
-              <ChordDiagram
-                position={DEMO_POSITION}
-                width={200}
-                height={240}
-                className="text-foreground"
-              />
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="border border-border/50 shadow-lg bg-card/50 backdrop-blur-sm">
+          <CardContent className="p-8 flex justify-center">
+            <ChordDiagram
+              position={DEMO_POSITION}
+              width={200}
+              height={240}
+              className="text-foreground"
+            />
+          </CardContent>
+        </Card>
       </div>
-    </Drawer>
+    </div>
   );
 }

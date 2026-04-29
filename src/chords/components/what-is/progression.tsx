@@ -1,20 +1,3 @@
-"use client";
-
-import ProgressionBuilder from "@/chords/components/progression-builder";
-import Providers from "@/chords/providers";
-import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerClose,
-} from "@/components/ui/drawer";
-import { HelpCircle, X } from "lucide-react";
-
 const PROGRESSION_CONTENT = (
   <>
     <section className="mb-6">
@@ -105,40 +88,6 @@ const PROGRESSION_CONTENT = (
   </>
 );
 
-export default function Page() {
-  return (
-    <Providers>
-      <Drawer direction="top">
-        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/50 shadow-sm px-4 py-3 flex items-center justify-between">
-          <div />
-          <DrawerTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-1.5 hover:bg-primary/10 hover:border-primary/30 transition-colors">
-              <HelpCircle className="h-4 w-4" />
-              What's Progression
-            </Button>
-          </DrawerTrigger>
-        </div>
-        <DrawerContent className="h-[85vh]">
-          <DrawerHeader className="text-left border-b">
-            <DrawerTitle>Chord Progressions Explained</DrawerTitle>
-            <DrawerDescription>
-              Learn about chord progressions, Roman numerals, and common patterns
-            </DrawerDescription>
-          </DrawerHeader>
-          <div className="p-6 overflow-y-auto h-[calc(85vh-140px)]">
-            {PROGRESSION_CONTENT}
-          </div>
-          <DrawerFooter className="border-t">
-            <DrawerClose asChild>
-              <Button variant="outline">
-                <X className="h-4 w-4 mr-2" />
-                Close
-              </Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-        <ProgressionBuilder />
-      </Drawer>
-    </Providers>
-  );
+export default function ProgressionContent() {
+  return PROGRESSION_CONTENT;
 }

@@ -1,3 +1,5 @@
+import WhatIsDrawer from "@/chords/components/what-is-drawer";
+import HomeContent from "@/chords/components/what-is/home";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -69,7 +71,13 @@ const tools = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-linear-to-br from-background via-background to-muted/20">
+    <WhatIsDrawer
+      drawerTitle="About This Guide"
+      drawerDescription="What you will learn and how to use the interactive tools"
+      buttonLabel="What is this Guide"
+      drawerContent={<HomeContent />}
+    >
+      <div className="min-h-screen bg-linear-to-br from-background via-background to-muted/20">
       {/* Hero Section */}
       <section className="px-4 md:px-8 py-16 md:py-20">
         <div className="mx-auto max-w-4xl text-center space-y-4">
@@ -753,6 +761,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </WhatIsDrawer>
   );
 }

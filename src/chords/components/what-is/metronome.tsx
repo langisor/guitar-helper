@@ -1,20 +1,3 @@
-"use client";
-
-import MetronomeTrainer from "@/chords/components/metronome-trainer";
-import Providers from "@/chords/providers";
-import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerClose,
-} from "@/components/ui/drawer";
-import { HelpCircle, X } from "lucide-react";
-
 const METRONOME_CONTENT = (
   <>
     <section className="mb-6">
@@ -98,40 +81,6 @@ const METRONOME_CONTENT = (
   </>
 );
 
-export default function Page() {
-  return (
-    <Providers>
-      <Drawer direction="top">
-        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border/50 shadow-sm px-4 py-3 flex items-center justify-between">
-          <div />
-          <DrawerTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-1.5 hover:bg-primary/10 hover:border-primary/30 transition-colors">
-              <HelpCircle className="h-4 w-4" />
-              What's Metronome
-            </Button>
-          </DrawerTrigger>
-        </div>
-        <DrawerContent className="h-[85vh]">
-          <DrawerHeader className="text-left border-b">
-            <DrawerTitle>The Metronome Explained</DrawerTitle>
-            <DrawerDescription>
-              Learn about tempo, BPM, time signatures, and why metronome practice matters
-            </DrawerDescription>
-          </DrawerHeader>
-          <div className="p-6 overflow-y-auto h-[calc(85vh-140px)]">
-            {METRONOME_CONTENT}
-          </div>
-          <DrawerFooter className="border-t">
-            <DrawerClose asChild>
-              <Button variant="outline">
-                <X className="h-4 w-4 mr-2" />
-                Close
-              </Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-        <MetronomeTrainer />
-      </Drawer>
-    </Providers>
-  );
+export default function MetronomeContent() {
+  return METRONOME_CONTENT;
 }

@@ -1,3 +1,5 @@
+import WhatIsDrawer from "@/chords/components/what-is-drawer";
+import MetronomeContent from "@/chords/components/what-is/metronome";
 import MetronomeTrainer from "@/chords/components/metronome-trainer";
 
 export const metadata = {
@@ -7,5 +9,14 @@ export const metadata = {
 };
 
 export default function MetroTrainerPage() {
-  return <MetronomeTrainer />;
+  return (
+    <WhatIsDrawer
+      drawerTitle="The Metronome Explained"
+      drawerDescription="Learn about tempo, BPM, time signatures, and why metronome practice matters"
+      buttonLabel="What's Metronome"
+      drawerContent={<MetronomeContent />}
+    >
+      <MetronomeTrainer />
+    </WhatIsDrawer>
+  );
 }
