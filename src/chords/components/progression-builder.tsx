@@ -476,7 +476,7 @@ export default function ProgressionBuilder() {
                 <div className="flex flex-wrap gap-2">
                   {borrowedChords.map((bc) => (
                     <Button
-                      key={bc.roman}
+                      key={`${bc.sourceMode}-${bc.roman}`}
                       variant="outline"
                       size="sm"
                       onClick={() => handleAddNumeral(bc.roman)}
