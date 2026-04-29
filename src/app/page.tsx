@@ -61,7 +61,7 @@ const tools = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-linear-to-br from-background via-background to-muted/20">
       {/* Hero Section */}
       <section className="px-4 md:px-8 py-16 md:py-20">
         <div className="mx-auto max-w-4xl text-center space-y-4">
