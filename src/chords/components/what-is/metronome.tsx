@@ -1,7 +1,7 @@
 "use client";
 
-import MetronomeTrainer from "@/tools/components/metronome-trainer";
-import Providers from "@/tools/providers";
+import MetronomeTrainer from "@/chords/components/metronome-trainer";
+import Providers from "@/chords/providers";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,

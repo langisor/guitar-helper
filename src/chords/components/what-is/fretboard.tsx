@@ -1,7 +1,7 @@
 "use client";
 
-import FretboardExplorer from "@/tools/components/fretboard-explorer";
-import Providers from "@/tools/providers";
+import FretboardExplorer from "@/chords/components/chord-explorer";
+import Providers from "@/chords/providers";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,

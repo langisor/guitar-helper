@@ -1,6 +1,6 @@
 "use client";
 
-import { ChordDiagram } from "@/tools/components/chord-diagram";
+import { ChordDiagram } from "@/chords/components/chord-diagram";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {

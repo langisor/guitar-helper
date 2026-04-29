@@ -1,7 +1,7 @@
 "use client";
 
-import ChordExplorer from "@/tools/components/chord-explorer";
-import Providers from "@/tools/providers";
+import ChordExplorer from "@/chords/components/chord-explorer";
+import Providers from "@/chords/providers";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,

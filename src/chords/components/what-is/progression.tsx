@@ -1,7 +1,7 @@
 "use client";
 
-import ProgressionBuilder from "@/tools/components/progression-builder";
-import Providers from "@/tools/providers";
+import ProgressionBuilder from "@/chords/components/progression-builder";
+import Providers from "@/chords/providers";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
