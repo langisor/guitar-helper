@@ -116,6 +116,19 @@ export function FretboardDrawer() {
     setIsPlayingLocal(false)
   }, [audio])
 
+  const handlePositionSelect = useCallback(
+    (index: number) => {
+      setPositionIndex(index)
+      if (!audio.isReady || isPlayingLocal) return
+      setIsPlayingLocal(true)
+      const duration = playMode === "strum" ? 2 : 1
+      audio.playChord(positions[index], duration)
+      const timeout = duration * 1000 + 200
+      setTimeout(() => setIsPlayingLocal(false), timeout)
+    },
+    [positions, audio, playMode, isPlayingLocal],
+  )
+
   const chordLabel = `${selectedKey} ${selectedSuffix}`
   const isPlaying = isPlayingLocal || audio.isPlaying
 
@@ -338,7 +351,7 @@ export function FretboardDrawer() {
                 {positions.map((pos, i) => (
                   <button
                     key={i}
-                    onClick={() => setPositionIndex(i)}
+                    onClick={() => handlePositionSelect(i)}
                     className={cn(
                       "group relative flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all hover:bg-accent",
                       positionIndex === i

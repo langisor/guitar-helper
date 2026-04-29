@@ -169,7 +169,6 @@ function FretboardMesh({ position, chordName }: Fretboard3DProps) {
                 color="white"
                 anchorX="center"
                 anchorY="middle"
-                font="/fonts/Geist-Bold.ttf"
               >
                 {finger.toString()}
               </Text>
@@ -228,7 +227,6 @@ function FretboardMesh({ position, chordName }: Fretboard3DProps) {
             color="#6b5a3a"
             anchorX="center"
             anchorY="middle"
-            font="/fonts/GeistMono-Regular.ttf"
           >
             {note}
           </Text>
@@ -251,7 +249,6 @@ function FretboardMesh({ position, chordName }: Fretboard3DProps) {
         color="#e8c97a"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/GeistMono-Bold.ttf"
       >
         {`${position.baseFret}fr`}
       </Text>
@@ -290,7 +287,6 @@ function FretboardMesh({ position, chordName }: Fretboard3DProps) {
         color="#e8c97a"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/Geist-Bold.ttf"
       >
         {chordName}
       </Text>
