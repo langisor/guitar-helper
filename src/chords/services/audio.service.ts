@@ -138,7 +138,10 @@ export class AudioEngine {
   async preloadChord(chord: Chord, positionIndex: number = 0): Promise<void> {
     const position = chord.positions[positionIndex];
     if (!position) return;
+    await this.preloadPosition(position);
+  }
 
+  async preloadPosition(position: ChordPosition): Promise<void> {
     for (const midi of position.midi) {
       await this.loadNote(midi);
     }

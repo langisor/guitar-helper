@@ -23,6 +23,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useLeftHanded } from "@/chords/providers/left-handed-provider";
+import { useAudioPlayback } from "../hooks/use-audio";
 import { cn } from "@/lib/utils";
 
 const KEYS: ChordKey[] = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
@@ -70,10 +71,18 @@ export default function FretboardExplorer() {
     });
   }, [voicings, selectedRegion, showAllFrets]);
 
-  const handleSelectVoicing = (index: number) => {
+  const { playChord, preloadPosition } = useAudioPlayback();
+
+  const handleSelectVoicing = async (index: number) => {
     if (selectedVoicingIndex === index) return;
     setCompareVoicingIndex(selectedVoicingIndex);
     setSelectedVoicingIndex(index);
+
+    const position = voicings[index]?.position;
+    if (position) {
+      await preloadPosition(position);
+      playChord(position);
+    }
   };
 
   return (

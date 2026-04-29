@@ -48,6 +48,11 @@ export function useAudioPlayback() {
     await engineRef.current.preloadChord(chord, positionIndex);
   }, []);
 
+  const preloadPosition = useCallback(async (position: ChordPosition) => {
+    if (!engineRef.current) return;
+    await engineRef.current.preloadPosition(position);
+  }, []);
+
   const playChord = useCallback((position: ChordPosition, duration: number = 2) => {
     if (!engineRef.current || !state.isReady) return;
     engineRef.current.resume();
@@ -157,6 +162,7 @@ export function useAudioPlayback() {
   return {
     ...state,
     preloadChord,
+    preloadPosition,
     playChord,
     playNote,
     playProgression,
